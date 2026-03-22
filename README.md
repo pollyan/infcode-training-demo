@@ -18,6 +18,9 @@
   mock-server/
   docs/
   .infcode/
+  SETUP.md
+  TRAINER_RUNBOOK.md
+  教学对照清单.md
 ```
 
 ## 当前状态
@@ -88,3 +91,11 @@ mvn spring-boot:run
 2. 再引用 `.infcode/rules/` 中的规则
 3. 再让 AI 做需求拆解和实施规划
 4. 最后完成“客户信息查询”功能
+
+## 讲师优先阅读
+
+如果你是讲师，建议阅读顺序：
+
+1. `SETUP.md`
+2. `TRAINER_RUNBOOK.md`
+3. `教学对照清单.md`

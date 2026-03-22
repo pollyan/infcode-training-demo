@@ -69,6 +69,11 @@ git checkout training/base
 
 它保留了基础骨架，但没有补完客户查询功能，适合让学员现场完成。
 
+讲师建议同时打开：
+
+- `TRAINER_RUNBOOK.md`
+- `教学对照清单.md`
+
 ### 如果你要看参考答案
 
 建议使用 `training/done` 分支。
