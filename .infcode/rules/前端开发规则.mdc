@@ -1,0 +1,9 @@
+---
+description: 前端开发规则
+alwaysApply: true
+---
+
+- 新增页面放在 `src/pages/`。
+- 页面不要直接写复杂请求逻辑。
+- 接口调用统一放在 `src/services/`。
+- 查询失败时展示用户可理解的提示。

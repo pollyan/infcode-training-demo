@@ -1,0 +1,9 @@
+---
+description: 后端开发规则
+alwaysApply: true
+---
+
+- 遵循 Controller、Service、DTO、Integration 分层。
+- 不要把外部接口调用直接写在 Controller 中。
+- 外部字段需映射为内部 DTO。
+- 发生异常时返回统一错误结构。
