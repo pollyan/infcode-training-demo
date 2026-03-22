@@ -107,12 +107,15 @@
 
 建议引用：
 
-- `docs/Product.md`
-- `docs/structure.md`
-- `docs/tech.md`
 - `docs/需求说明.md`
 - `docs/外部集成说明.md`
 - `.infcode/rules/`
+
+然后通过 DeepMap Lite 自动生成：
+
+- `Product.md`
+- `structure.md`
+- `tech.md`
 
 讲师要强调：
 
