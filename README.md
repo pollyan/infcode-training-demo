@@ -18,9 +18,7 @@
   mock-server/
   docs/
   .infcode/
-  SETUP.md
-  TRAINER_RUNBOOK.md
-  教学对照清单.md
+  trainer-kit/
 ```
 
 ## 当前状态
@@ -94,8 +92,12 @@ mvn spring-boot:run
 
 ## 讲师优先阅读
 
-如果你是讲师，建议阅读顺序：
+如果你是讲师，请直接进入：
 
-1. `SETUP.md`
-2. `TRAINER_RUNBOOK.md`
-3. `教学对照清单.md`
+`trainer-kit/`
+
+建议阅读顺序：
+
+1. `trainer-kit/SETUP.md`
+2. `trainer-kit/TRAINER_RUNBOOK.md`
+3. `trainer-kit/教学对照清单.md`
