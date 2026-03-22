@@ -29,8 +29,8 @@ export function renderHomePage() {
           </section>
           <section class="card">
             <h2>前端待补内容</h2>
-            <p class="todo">TODO：新增 <code>src/pages/customer/CustomerSearchPage.js</code></p>
-            <p class="todo">TODO：新增 <code>src/services/customerService.js</code></p>
+            <p>已提供客户查询页面和查询 service 的参考实现，可直接作为讲师标准答案。</p>
+            <p><a class="link-button" href="#/customer-search">打开客户信息查询页</a></p>
           </section>
           <section class="card">
             <h2>后端待补内容</h2>
