@@ -29,6 +29,22 @@ const customerData = {
     code: "500",
     message: "upstream service unavailable",
     data: null
+  },
+  C202503998: {
+    code: "200",
+    message: "success",
+    data: null
+  },
+  C202504021: {
+    code: "200",
+    message: "success",
+    data: {
+      cust_code: "C202504021",
+      cust_name: "嘉兴明德劳务服务有限公司",
+      cust_status: "ACTIVE",
+      contact_phone: "13700001111",
+      updated_at: "2026-03-19 14:12:00"
+    }
   }
 };
 
