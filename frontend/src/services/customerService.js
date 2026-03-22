@@ -26,13 +26,3 @@ export async function fetchCustomerDirectory(filters = {}) {
 
   return Array.isArray(response.data) ? response.data : [];
 }
-
-export async function syncCustomerProfile(customerCode) {
-  const response = await httpPost(`${API_BASE}/api/customers/${encodeURIComponent(customerCode)}/sync-profile`);
-
-  if (!response.success) {
-    throw new Error(response.message || "同步失败");
-  }
-
-  return response.data;
-}

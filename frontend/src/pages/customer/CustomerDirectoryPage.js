@@ -1,4 +1,4 @@
-import { fetchCustomerDirectory, syncCustomerProfile } from "../../services/customerService.js";
+import { fetchCustomerDirectory } from "../../services/customerService.js";
 
 const DEFAULT_FILTERS = {
   keyword: "",
@@ -56,11 +56,11 @@ function renderSummaryCards(customers) {
   `;
 }
 
-function renderTableRows(customers, syncingCustomerCode) {
+function renderTableRows(customers) {
   if (!customers.length) {
     return `
       <tr>
-        <td colspan="9" class="table-empty">
+        <td colspan="8" class="table-empty">
           当前筛选条件下没有找到客户，请调整筛选条件后重试。
         </td>
       </tr>
@@ -68,9 +68,6 @@ function renderTableRows(customers, syncingCustomerCode) {
   }
 
   return customers.map((customer) => {
-    const syncButtonText = syncingCustomerCode === customer.customerCode ? "同步中..." : "同步外部档案";
-    const syncDisabled = syncingCustomerCode === customer.customerCode ? "disabled" : "";
-
     return `
       <tr>
         <td>
@@ -88,20 +85,14 @@ function renderTableRows(customers, syncingCustomerCode) {
         <td>
           <span class="status-pill ${getStatusClass(customer.customerStatus)}">${escapeHtml(customer.customerStatus)}</span>
         </td>
-        <td>
-          <span class="status-pill ${getStatusClass(customer.syncStatus)}">${escapeHtml(customer.syncStatus)}</span>
-          <div class="table-sub-text">${escapeHtml(customer.syncMessage)}</div>
-        </td>
         <td>${escapeHtml(customer.contactPhone || "-")}</td>
         <td>
           <div class="table-main-text">${escapeHtml(customer.updatedTime || "-")}</div>
-          <div class="table-sub-text">上次同步：${escapeHtml(customer.lastSyncTime || "未同步")}</div>
         </td>
         <td>
           <div class="table-actions">
             <button type="button" class="ghost-button" data-action="view" data-code="${escapeHtml(customer.customerCode)}">查看</button>
             <button type="button" class="ghost-button" data-action="edit" data-code="${escapeHtml(customer.customerCode)}">编辑</button>
-            <button type="button" class="primary-button small-button" data-action="sync" data-code="${escapeHtml(customer.customerCode)}" ${syncDisabled}>${syncButtonText}</button>
           </div>
         </td>
       </tr>
@@ -109,7 +100,7 @@ function renderTableRows(customers, syncingCustomerCode) {
   }).join("");
 }
 
-function renderPageState({ customers, syncingCustomerCode, alertMessage, alertType, loading }) {
+function renderPageState({ customers, alertMessage, alertType, loading }) {
   const alertHtml = alertMessage
     ? `<div class="notice-banner ${alertType === "error" ? "notice-error" : "notice-success"}">${escapeHtml(alertMessage)}</div>`
     : "";
@@ -143,13 +134,12 @@ function renderPageState({ customers, syncingCustomerCode, alertMessage, alertTy
               <th>负责人</th>
               <th>风险等级</th>
               <th>客户状态</th>
-              <th>同步状态</th>
               <th>联系电话</th>
               <th>更新时间</th>
               <th>操作</th>
             </tr>
           </thead>
-          <tbody>${renderTableRows(customers, syncingCustomerCode)}</tbody>
+          <tbody>${renderTableRows(customers)}</tbody>
         </table>
       </div>
     </section>
@@ -250,7 +240,6 @@ export function bindCustomerDirectoryPage(root) {
   const state = {
     filters: { ...DEFAULT_FILTERS },
     customers: [],
-    syncingCustomerCode: "",
     alertMessage: "",
     alertType: "success",
     loading: false
@@ -312,30 +301,9 @@ export function bindCustomerDirectoryPage(root) {
 
       if (action === "view" || action === "edit") {
         state.alertType = "success";
-        state.alertMessage = `${customerCode} 的${action === "view" ? "查看" : "编辑"}页面已预留，本次演练先聚焦外部档案同步。`;
+        state.alertMessage = `${customerCode} 的${action === "view" ? "查看" : "编辑"}页面已预留。`;
         renderState();
         return;
-      }
-
-      if (action !== "sync") return;
-
-      state.syncingCustomerCode = customerCode;
-      state.alertMessage = "";
-      renderState();
-
-      try {
-        const updatedCustomer = await syncCustomerProfile(customerCode);
-        state.customers = state.customers.map((item) => (
-          item.customerCode === customerCode ? updatedCustomer : item
-        ));
-        state.alertType = "success";
-        state.alertMessage = `${customerCode} 已完成外部档案同步，列表数据已刷新。`;
-      } catch (error) {
-        state.alertType = "error";
-        state.alertMessage = error.message || "同步失败，请稍后再试。";
-      } finally {
-        state.syncingCustomerCode = "";
-        renderState();
       }
     });
   }

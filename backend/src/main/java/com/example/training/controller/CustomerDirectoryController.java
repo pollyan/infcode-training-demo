@@ -32,9 +32,4 @@ public class CustomerDirectoryController {
     ) {
         return CommonResponse.success(customerDirectoryService.listCustomers(keyword, customerStatus, syncStatus));
     }
-
-    @PostMapping("/{customerCode}/sync-profile")
-    public CommonResponse<CustomerDirectoryItemResponse> syncCustomerProfile(@PathVariable String customerCode) {
-        return CommonResponse.success(customerDirectoryService.syncCustomerProfile(customerCode));
-    }
 }

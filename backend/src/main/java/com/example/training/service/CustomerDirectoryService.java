@@ -2,7 +2,6 @@ package com.example.training.service;
 
 import com.example.training.dto.CustomerDirectoryItemResponse;
 import com.example.training.dto.ExternalCustomerInfoDTO;
-import com.example.training.integration.CustomerCenterClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,11 +19,9 @@ public class CustomerDirectoryService {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private final CustomerCenterClient customerCenterClient;
     private final Map<String, CustomerDirectoryItemResponse> customerStore = new ConcurrentHashMap<>();
 
-    public CustomerDirectoryService(CustomerCenterClient customerCenterClient) {
-        this.customerCenterClient = customerCenterClient;
+    public CustomerDirectoryService() {
         initializeCustomerStore();
     }
 
@@ -40,28 +37,6 @@ public class CustomerDirectoryService {
             .sorted(Comparator.comparing(CustomerDirectoryItemResponse::getUpdatedTime, Comparator.nullsLast(String::compareTo)).reversed())
             .map(this::copyItem)
             .toList();
-    }
-
-    public CustomerDirectoryItemResponse syncCustomerProfile(String customerCode) {
-        if (customerCode == null || customerCode.isBlank()) {
-            throw new IllegalArgumentException("customerCode is required");
-        }
-
-        CustomerDirectoryItemResponse current = customerStore.get(customerCode.trim());
-        if (current == null) {
-            throw new IllegalArgumentException("未找到客户：" + customerCode);
-        }
-
-        ExternalCustomerInfoDTO externalInfo = customerCenterClient.queryCustomer(customerCode.trim());
-        current.setCustomerName(defaultValue(externalInfo.getCustomerName(), current.getCustomerName()));
-        current.setCustomerStatus(defaultValue(externalInfo.getCustomerStatus(), current.getCustomerStatus()));
-        current.setContactPhone(defaultValue(externalInfo.getContactPhone(), "未提供"));
-        current.setUpdatedTime(defaultValue(externalInfo.getUpdatedTime(), current.getUpdatedTime()));
-        current.setLastSyncTime(LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        current.setSyncStatus("SUCCESS");
-        current.setSyncMessage("外部客户中心同步成功");
-
-        return copyItem(current);
     }
 
     private boolean matchesKeyword(CustomerDirectoryItemResponse item, String normalizedKeyword) {
