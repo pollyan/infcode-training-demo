@@ -45,8 +45,20 @@ start_service() {
   printf '[START] %s\n' "$name"
   (
     cd "$workdir"
-    nohup bash -lc "$command" >"$log_file" 2>&1 &
-    echo $! >"$pid_file"
+    # 直接启动命令，不使用 bash -lc 包装
+    nohup $command >"$log_file" 2>&1 &
+    local service_pid=$!
+    echo $service_pid >"$pid_file"
+    
+    # 等待一小段时间确保进程启动
+    sleep 1
+    
+    # 验证进程是否成功启动
+    if ! kill -0 "$service_pid" >/dev/null 2>&1; then
+      printf '[ERROR] Failed to start %s. Check log: %s\n' "$name" "$log_file" >&2
+      rm -f "$pid_file"
+      return 1
+    fi
   )
 }
 
