@@ -20,9 +20,24 @@
 2. 启动后端服务
 3. 启动前端页面
 
-## 3. 启动命令
+## 3. 推荐直接用脚本
 
-### 3.1 启动 mock 外部服务
+在项目根目录运行：
+
+```bash
+./scripts/check-env.sh
+./scripts/start-all.sh
+```
+
+停止服务：
+
+```bash
+./scripts/stop-all.sh
+```
+
+## 4. 启动命令
+
+### 4.1 启动 mock 外部服务
 
 ```bash
 cd mock-server
@@ -34,7 +49,7 @@ npm start
 
 `http://127.0.0.1:9090/health`
 
-### 3.2 启动后端服务
+### 4.2 启动后端服务
 
 ```bash
 cd backend
@@ -45,7 +60,7 @@ mvn spring-boot:run
 
 `http://127.0.0.1:8080/api/health`
 
-### 3.3 启动前端页面
+### 4.3 启动前端页面
 
 ```bash
 cd frontend
@@ -57,7 +72,7 @@ npm start
 
 `http://127.0.0.1:5173`
 
-## 4. 训练建议顺序
+## 5. 训练建议顺序
 
 ### 如果你要做客户演练
 
@@ -84,7 +99,7 @@ git checkout training/done
 
 它包含一份完整参考实现，适合讲师备课、对照或兜底。
 
-## 5. 训练中建议引用的材料
+## 6. 训练中建议引用的材料
 
 优先引用：
 
@@ -95,7 +110,7 @@ git checkout training/done
 - `docs/外部集成说明.md`
 - `.infcode/rules/`
 
-## 6. 当前参考实现说明
+## 7. 当前参考实现说明
 
 当前仓库中的参考实现包含：
 
@@ -105,7 +120,7 @@ git checkout training/done
 4. 外部客户中心调用 client
 5. 基础字段映射与错误处理
 
-## 7. 培训时推荐演示流程
+## 8. 培训时推荐演示流程
 
 1. 建立上下文
 2. 做需求理解

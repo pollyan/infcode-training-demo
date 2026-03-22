@@ -48,6 +48,19 @@
 
 ## 推荐启动方式
 
+也可以直接使用根目录脚本：
+
+```bash
+./scripts/check-env.sh
+./scripts/start-all.sh
+```
+
+停止服务：
+
+```bash
+./scripts/stop-all.sh
+```
+
 ### 前端
 
 ```bash
@@ -82,6 +95,15 @@ mvn spring-boot:run
 默认地址建议：
 
 `http://localhost:8080`
+
+## 启动脚本
+
+根目录已提供：
+
+- `scripts/check-env.sh`：检测 Node、npm、Java、Maven 和项目目录
+- `scripts/install-deps.sh`：安装前端和 mock 服务依赖
+- `scripts/start-all.sh`：一键检测、安装并启动前端、后端和 mock 服务
+- `scripts/stop-all.sh`：停止已启动的服务
 
 ## 培训建议
 
