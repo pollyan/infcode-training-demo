@@ -96,9 +96,13 @@ git checkout done
 
 ## 6. 训练中建议引用的材料
 
-优先引用：
+建议全面引用系统业务与架构规范：
 
 - `docs/需求说明.md`
+- `docs/知识库文档/业务全景与PRD_客户档案同步.md`
+- `docs/知识库文档/第三方客户中心_API契约.md`
+- `docs/知识库文档/代码架构与安全规范_v2.md`
+- `docs/知识库文档/前端_UI_组件交互规范.md`
 - `.infcode/rules/`
 
 然后在上下文构建阶段，通过 DeepMap Lite 自动生成：

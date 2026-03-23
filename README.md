@@ -107,7 +107,7 @@ mvn spring-boot:run
 
 ## 培训建议
 
-1. 先引用 `docs/需求说明.md`
+1. 先引用 `docs/需求说明.md` 及 `docs/知识库文档/` 下的业务概念与规范资料
 2. 再引用 `.infcode/rules/` 中的规则
 3. 在上下文构建阶段使用 DeepMap Lite 生成 `Product.md`、`structure.md`、`tech.md`
 4. 再让 AI 做需求拆解和实施规划
