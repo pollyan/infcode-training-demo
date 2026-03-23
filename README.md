@@ -14,13 +14,13 @@
 ## 项目结构
 
 ```text
-06_基础练习项目/
+02_练习代码库/
   frontend/
   backend/
   mock-server/
   docs/
+  scripts/
   .infcode/
-  trainer-kit/
 ```
 
 ## 当前状态
@@ -38,7 +38,7 @@
 
 ### 故意未完成
 
-以下内容建议在 `training/base` 分支中通过 InfCode 完成：
+以下内容建议在 `main` 分支中通过 InfCode 完成：
 
 - 列表页“同步外部档案”行操作
 - 前端同步 service 与状态刷新
@@ -107,7 +107,7 @@ mvn spring-boot:run
 
 ## 培训建议
 
-1. 先引用 `docs/需求说明.md` 和 `docs/外部集成说明.md`
+1. 先引用 `docs/需求说明.md`
 2. 再引用 `.infcode/rules/` 中的规则
 3. 在上下文构建阶段使用 DeepMap Lite 生成 `Product.md`、`structure.md`、`tech.md`
 4. 再让 AI 做需求拆解和实施规划
@@ -115,12 +115,6 @@ mvn spring-boot:run
 
 ## 讲师优先阅读
 
-如果你是讲师，请直接进入：
+如果你是讲师，建议优先阅读：
 
-`trainer-kit/`
-
-建议阅读顺序：
-
-1. `trainer-kit/SETUP.md`
-2. `trainer-kit/TRAINER_RUNBOOK.md`
-3. `trainer-kit/教学对照清单.md`
+`SETUP.md`

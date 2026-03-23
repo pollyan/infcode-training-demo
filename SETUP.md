@@ -76,25 +76,20 @@ npm start
 
 ### 如果你要做客户演练
 
-建议优先使用 `training/base` 分支。
+建议优先使用 `main` 分支。
 
 ```bash
-git checkout training/base
+git checkout main
 ```
 
 它保留了真实列表页骨架，但没有补完“同步外部档案”能力，适合让学员现场完成。
 
-讲师建议同时打开：
-
-- `TRAINER_RUNBOOK.md`
-- `教学对照清单.md`
-
 ### 如果你要看参考答案
 
-建议使用 `training/done` 分支。
+建议使用 `done` 分支。
 
 ```bash
-git checkout training/done
+git checkout done
 ```
 
 它包含一份完整参考实现，适合讲师备课、对照或兜底。
@@ -104,7 +99,6 @@ git checkout training/done
 优先引用：
 
 - `docs/需求说明.md`
-- `docs/外部集成说明.md`
 - `.infcode/rules/`
 
 然后在上下文构建阶段，通过 DeepMap Lite 自动生成：
