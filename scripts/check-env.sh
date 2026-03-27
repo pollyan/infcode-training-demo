@@ -25,7 +25,7 @@ printf 'Project: %s\n' "$ROOT_DIR"
 missing=0
 
 print_header "Required Commands"
-for cmd in node npm java mvn; do
+for cmd in node npm java mvn git; do
   if ! check_command "$cmd"; then
     missing=1
   fi
@@ -44,9 +44,12 @@ fi
 if command -v mvn >/dev/null 2>&1; then
   printf 'mvn:  %s\n' "$(mvn -v 2>/dev/null | head -n 1)"
 fi
+if command -v git >/dev/null 2>&1; then
+  printf 'git:  %s\n' "$(git --version 2>/dev/null)"
+fi
 
 print_header "Project Directories"
-for dir in frontend backend mock-server docs trainer-kit .infcode/rules; do
+for dir in frontend backend mock-server docs .infcode/rules; do
   if [ -d "$ROOT_DIR/$dir" ]; then
     printf '[OK] %s\n' "$dir"
   else
@@ -54,6 +57,26 @@ for dir in frontend backend mock-server docs trainer-kit .infcode/rules; do
     missing=1
   fi
 done
+
+print_header "Git Project Check"
+if [ -d "$ROOT_DIR/.git" ]; then
+  printf '[OK] .git directory detected\n'
+else
+  printf '[MISSING] .git directory\n'
+  missing=1
+fi
+
+if git -C "$ROOT_DIR" rev-parse --show-toplevel >/dev/null 2>&1; then
+  printf '[OK] Project root is recognized by git\n'
+else
+  printf '[MISSING] Project root is not recognized by git\n'
+  missing=1
+fi
+
+print_header "Training Notes"
+printf -- '- Training should prefer the customer\\'s real network, machine, IDE, and project when feasible.\n'
+printf -- '- For Java multi-module projects, open the full project from the repository root when possible.\n'
+printf -- '- Rules, DOCX documents, and knowledge-base materials should be prepared before class.\n'
 
 if [ "$missing" -ne 0 ]; then
   print_header "Result"

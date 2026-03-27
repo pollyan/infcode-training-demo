@@ -13,6 +13,8 @@
 
 ## 项目结构
 
+代码库地址：https://github.com/pollyan/infcode-training-demo
+
 ```text
 02_练习代码库/
   frontend/
@@ -61,6 +63,15 @@
 ./scripts/stop-all.sh
 ```
 
+## 培训环境建议
+
+如果本代码库用于客户现场培训，建议优先遵循以下原则：
+
+- 尽量使用客户真实网络、真实开发机器、真实 IDE 和真实项目环境
+- 讲师提前按客户实际 IDE 和版本做一轮预演
+- 对 Java 多模块项目，尽量从项目根目录打开完整工程
+- 培训过程除验证功能开发闭环外，也同步记录真实环境中暴露的问题
+
 ### 前端
 
 ```bash
@@ -100,7 +111,7 @@ mvn spring-boot:run
 
 根目录已提供：
 
-- `scripts/check-env.sh`：检测 Node、npm、Java、Maven 和项目目录
+- `scripts/check-env.sh`：检测 Node、npm、Java、Maven、Git 和关键项目目录
 - `scripts/install-deps.sh`：安装前端和 mock 服务依赖
 - `scripts/start-all.sh`：一键检测、安装并启动前端、后端和 mock 服务
 - `scripts/stop-all.sh`：停止已启动的服务
@@ -108,10 +119,11 @@ mvn spring-boot:run
 ## 培训建议
 
 1. 先引用 `docs/需求说明.md` 及 `docs/知识库文档/` 下的业务概念与规范资料
-2. 再引用 `.infcode/rules/` 中的规则
-3. 在上下文构建阶段使用 DeepMap Lite 生成 `Product.md`、`structure.md`、`tech.md`
-4. 再让 AI 做需求拆解和实施规划
-5. 最后完成“客户主数据列表页里的同步外部档案”需求
+2. 再上传并引用 `.infcode/rules/` 中的规则
+3. 如现场有真实需求或接口 `DOCX` 文档，也一并上传
+4. 在上下文构建阶段创建或引用知识库，并使用 DeepMap Lite 生成 `Product.md`、`structure.md`、`tech.md`
+5. 再让 AI 做需求拆解和实施规划
+6. 最后完成“客户主数据列表页里的同步外部档案”需求，并记录现场暴露的问题
 
 ## 讲师优先阅读
 
