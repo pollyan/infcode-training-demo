@@ -1,5 +1,9 @@
 # SETUP
 
+练习项目代码库地址：
+
+- GitHub: `https://github.com/pollyan/infcode-training-demo`
+
 ## 1. 环境要求
 
 ### 前端与 mock 服务
