@@ -2,6 +2,10 @@ package com.example.training.service;
 
 import com.example.training.dto.CustomerDirectoryItemResponse;
 import com.example.training.dto.ExternalCustomerInfoDTO;
+import com.example.training.exception.BizException;
+import com.example.training.integration.ExternalCustomerCenterClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,14 +18,36 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 客户目录服务
+ * 
+ * 负责客户档案的业务逻辑处理，包括查询和同步功能
+ */
 @Service
 public class CustomerDirectoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerDirectoryService.class);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     private final Map<String, CustomerDirectoryItemResponse> customerStore = new ConcurrentHashMap<>();
+    private final ExternalCustomerCenterClient externalCustomerCenterClient;
 
+    /**
+     * 构造函数（用于依赖注入）
+     * 
+     * @param externalCustomerCenterClient 外部客户中心客户端
+     */
+    public CustomerDirectoryService(ExternalCustomerCenterClient externalCustomerCenterClient) {
+        this.externalCustomerCenterClient = externalCustomerCenterClient;
+        initializeCustomerStore();
+    }
+
+    /**
+     * 无参构造函数（用于测试）
+     */
     public CustomerDirectoryService() {
+        this.externalCustomerCenterClient = null;
         initializeCustomerStore();
     }
 
@@ -88,6 +114,93 @@ public class CustomerDirectoryService {
         items.add(buildItem(seed("C202503998", "宁波远望工程咨询有限公司", "普通客户", "陈璐", "工程咨询", "中", "INACTIVE", "PENDING", "外部档案为空，待排查", "-", "2026-03-20 15:20:00", "2026-03-20 15:25:00")));
         items.add(buildItem(seed("C202504021", "嘉兴明德劳务服务有限公司", "普通客户", "韩涛", "劳务服务", "低", "ACTIVE", "SUCCESS", "最近一次同步成功", "13700001111", "2026-03-19 14:12:00", "2026-03-19 14:20:00")));
         return items;
+    }
+
+    /**
+     * 同步客户档案
+     * 
+     * 从外部客户中心获取最新客户资料，完成字段映射后更新本地数据
+     * 
+     * @param customerCode 客户编号
+     * @return 同步后的客户档案信息
+     * @throws BizException 当客户不存在或外部服务调用失败时抛出
+     */
+    public CustomerDirectoryItemResponse syncCustomerProfile(String customerCode) {
+        logger.info("[客户档案同步] 开始同步客户档案, customerCode={}", customerCode);
+
+        // 调用外部客户中心获取最新数据
+        ExternalCustomerInfoDTO externalData = externalCustomerCenterClient.fetchCustomerProfile(customerCode);
+
+        // 获取本地客户数据
+        CustomerDirectoryItemResponse customer = customerStore.get(customerCode);
+        if (customer == null) {
+            logger.warn("[客户档案同步] 客户不存在, customerCode={}", customerCode);
+            throw new BizException("客户不存在");
+        }
+
+        // 字段映射
+        customer.setCustomerName(externalData.getCustomerName());
+        customer.setCustomerStatus(externalData.getCustomerStatus());
+        
+        // 联系电话脱敏处理
+        customer.setContactPhone(maskPhoneNumber(externalData.getContactPhone()));
+        
+        // 更新时间格式转换
+        customer.setUpdatedTime(formatUpdateTime(externalData.getUpdatedTime()));
+        
+        // 更新同步状态
+        customer.setSyncStatus("SUCCESS");
+        customer.setSyncMessage("同步成功");
+        
+        // 记录同步时间
+        String nowTime = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+        customer.setLastSyncTime(nowTime);
+
+        logger.info("[客户档案同步] 同步完成, customerCode={}", customerCode);
+
+        return copyItem(customer);
+    }
+
+    /**
+     * 联系电话脱敏处理
+     * 
+     * 保留前3后4，中间4位用星号屏蔽
+     * 如果电话号码短于7位，不进行脱敏
+     * 
+     * @param phoneNumber 原始电话号码
+     * @return 脱敏后的电话号码
+     */
+    private String maskPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.length() < 7) {
+            return phoneNumber;
+        }
+        
+        int length = phoneNumber.length();
+        String first3 = phoneNumber.substring(0, 3);
+        String last4 = phoneNumber.substring(length - 4);
+        return first3 + "****" + last4;
+    }
+
+    /**
+     * 更新时间格式转换
+     * 
+     * 将 ISO 8601 格式的时间转换为 yyyy-MM-dd HH:mm:ss 格式
+     * 
+     * @param lastModifiedDate ISO 8601 格式的时间
+     * @return 转换后的时间字符串
+     */
+    private String formatUpdateTime(String lastModifiedDate) {
+        if (lastModifiedDate == null) {
+            return null;
+        }
+        
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(lastModifiedDate, ISO_DATE_TIME_FORMATTER);
+            return dateTime.format(DATE_TIME_FORMATTER);
+        } catch (Exception e) {
+            logger.warn("[客户档案同步] 时间格式转换失败, lastModifiedDate={}", lastModifiedDate, e);
+            return lastModifiedDate;
+        }
     }
 
     private Map<String, String> seed(
