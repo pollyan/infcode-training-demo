@@ -1,136 +1,113 @@
 # 项目结构
 
-## 根目录结构
+## 根目录
 
 ```
-infcode-training-demo/
-├── frontend/              # 前端应用目录
-├── backend/               # 后端应用目录
-├── mock-server/           # 外部服务模拟器
-├── trainer-kit/           # 讲师培训资料
-├── scripts/               # 启动和环境检查脚本
-├── docs/                  # 项目文档
-└── README.md              # 项目说明文档
+├── frontend/          # 前端 SPA（纯 JS + CSS，无构建工具）
+├── backend/           # Java 后端（Spring Boot 骨架）
+├── mock-server/       # 模拟外部客户中心服务（Node.js）
+├── docs/              # 业务文档与知识库
+├── specs/             # 需求规格说明
+├── scripts/           # 启动/检测/停止脚本
+├── .infcode/          # InfCode 规则、技能与知识库配置
+├── CONTEXT.md         # 领域词汇表（统一术语定义）
+├── SETUP.md           # 环境搭建与启动指引
+└── README.md          # 项目简介与当前状态说明
 ```
 
-## 前端目录结构 (frontend/)
+## frontend/
 
 ```
-frontend/
-├── index.html             # 应用入口 HTML 文件
-├── server.js              # 前端开发服务器
-├── package.json           # 前端项目配置文件
-└── src/                   # 源代码目录
-    ├── main.js            # 前端应用主入口
-    ├── styles.css         # 全局样式文件
-    ├── pages/             # 页面组件目录
-    │   └── customer/      # 客户目录模块
-    │       └── CustomerDirectoryPage.js
-    └── services/          # 服务层目录
-        ├── http.js        # HTTP 请求封装
-        └── customerService.js  # 客户服务接口
+├── index.html             # 入口 HTML
+├── server.js              # Node.js 静态文件服务器
+├── package.json
+└── src/
+    ├── main.js            # 路由与页面挂载（hash 路由，#/customers）
+    ├── styles.css         # 全局样式
+    ├── pages/
+    │   └── customer/
+    │       └── CustomerDirectoryPage.js   # 客户主数据列表页（渲染+交互）
+    └── services/
+        ├── http.js                    # HTTP 封装（GET/POST + 错误解析）
+        └── customerService.js         # 客户 API 调用（列表查询+同步待补充）
 ```
 
-**关键说明**：
-- `pages/` 目录：存放所有页面组件，按功能模块划分子目录
-- `services/` 目录：统一管理后端 API 调用逻辑，页面组件不直接编写请求代码
-- `main.js`：负责路由初始化和页面渲染
-
-## 后端目录结构 (backend/)
+## backend/src/main/java/com/example/training/
 
 ```
-backend/
-├── pom.xml                # Maven 项目配置文件
-├── README.md              # 后端说明文档
-└── src/main/
-    ├── java/com/example/training/
-    │   ├── TrainingApplication.java  # Spring Boot 应用入口
-    │   ├── controller/    # 控制器层
-    │   │   ├── HealthController.java
-    │   │   └── CustomerDirectoryController.java
-    │   ├── service/       # 服务层
-    │   │   └── CustomerDirectoryService.java
-    │   ├── integration/   # 外部集成层
-    │   │   └── CustomerCenterClient.java
-    │   ├── dto/           # 数据传输对象
-    │   │   ├── CommonResponse.java
-    │   │   ├── CustomerDirectoryItemResponse.java
-    │   │   └── ExternalCustomerInfoDTO.java
-    │   └── exception/     # 异常处理
-    │       └── GlobalExceptionHandler.java
-    └── resources/
-        └── application.properties  # 应用配置文件
+├── TrainingApplication.java        # Spring Boot 启动类 + RestTemplate Bean
+├── controller/
+│   ├── HealthController.java        # GET /api/health 健康检查
+│   └── CustomerDirectoryController.java  # GET /api/customers 列表查询（同步端点待补充）
+├── service/
+│   └── CustomerDirectoryService.java      # 客户业务逻辑（内存存储+筛选+同步）
+├── dto/
+│   ├── CommonResponse.java               # 统一返回结构 {success, message, data}
+│   ├── CustomerDirectoryItemResponse.java # 客户列表项 DTO（12 字段）
+│   ├── ExternalCustomerInfoDTO.java       # 外部数据映射后的内部 DTO（5 字段）
+│   └── ExternalCustomerResponse.java      # 外部客户中心原始响应 DTO（含 @JsonProperty 映射）
+├── integration/
+│   └── ExternalCustomerCenterClient.java  # 外部客户中心 HTTP 客户端（鉴权+错误码映射）
+├── exception/
+│   ├── BizException.java           # 业务异常（含 userMessage，禁止透传技术细节）
+│   └── GlobalExceptionHandler.java # @RestControllerAdvice → CommonResponse.failure
+└── resources/
+    └── application.properties      # server.port=8080
 ```
 
-**分层架构说明**：
-- **Controller 层**：处理 HTTP 请求，负责参数校验和响应封装
-- **Service 层**：实现业务逻辑，协调各层组件完成功能
-- **Integration 层**：封装所有第三方服务调用，处理外部接口交互
-- **DTO 层**：定义数据传输对象，实现内外部数据模型的隔离
-- **Exception 层**：统一异常处理，返回标准化错误响应
-
-## Mock Server 目录结构 (mock-server/)
+## backend/src/test/
 
 ```
-mock-server/
-├── server.js              # Mock 服务器实现
-└── package.json           # 项目配置文件
+└── java/com/example/training/
+    ├── dto/ExternalCustomerResponseTest.java
+    ├── integration/ExternalCustomerCenterClientTest.java
+    ├── service/CustomerDirectoryServiceTest.java
+    └── exception/BizExceptionTest.java
 ```
 
-**功能说明**：
-- 模拟外部客户中心服务，提供客户信息查询接口
-- 端口：9090
-- 接口路径：`/mock/customer-center/customers/{customerCode}`
-
-## 培训资料目录 (trainer-kit/)
+## mock-server/
 
 ```
-trainer-kit/
-├── README.md              # 讲师入口文档
-├── SETUP.md               # 环境准备指南
-├── TRAINER_RUNBOOK.md     # 讲师操作手册
-├── 开场10分钟讲稿.md       # 开场讲稿
-├── 教学对照清单.md         # 培训对照清单
-└── 故障注入说明.md         # 故障注入指南
+├── server.js    # 模拟客户中心 API（含成功/熔断/限流/不存在/参数错误等场景）
+├── package.json
 ```
 
-**用途说明**：
-- 为讲师提供培训准备、现场教学和课后复盘的完整指导
-- 包含环境搭建、教学节奏控制、学员问题处理等内容
-
-## 脚本目录 (scripts/)
+## docs/
 
 ```
-scripts/
-├── start-all.sh           # 一键启动所有服务
-├── stop-all.sh            # 停止所有服务
-├── check-env.sh           # 环境检查脚本
-└── install-deps.sh        # 依赖安装脚本
+├── 需求说明.md
+├── plans/                          # 实施计划
+└── 知识库文档/
+    ├── 业务全景与PRD_客户档案同步.md
+    ├── 第三方客户中心_API契约.md
+    ├── 代码架构与安全规范_v2.md
+    └── 前端_UI_组件交互规范.md
 ```
 
-## 文档目录 (docs/)
+## scripts/
 
 ```
-docs/
-├── 需求说明.md             # 需求说明文档
-└── 外部集成说明.md         # 外部集成说明文档
+├── check-env.sh    # 检测 Node/npm/Java/Maven/Git 环境
+├── install-deps.sh # 安装前端和 mock 依赖
+├── start-all.sh    # 一键启动所有服务
+├── stop-all.sh     # 一键停止所有服务
 ```
 
-## 关键文件位置
+## .infcode/
 
-| 文件类型 | 路径 | 说明 |
-|---------|------|------|
-| 前端入口 | `frontend/src/main.js` | 前端应用启动入口 |
-| 后端入口 | `backend/src/main/java/com/example/training/TrainingApplication.java` | Spring Boot 应用入口 |
-| 客户目录 API | `backend/src/main/java/com/example/training/controller/CustomerDirectoryController.java` | 客户目录接口 |
-| 外部服务集成 | `backend/src/main/java/com/example/training/integration/CustomerCenterClient.java` | 客户中心客户端 |
-| 前端客户服务 | `frontend/src/services/customerService.js` | 前端客户查询服务 |
-| Mock 服务器 | `mock-server/server.js` | 外部服务模拟器 |
-| 应用配置 | `backend/src/main/resources/application.properties` | 后端应用配置 |
+```
+├── rules/          # 开发规则（前端/后端/集成/全局）
+├── skills/         # InfCode 技能定义（TDD/调试/验证/需求评审等）
+├── knowledge/      # 项目知识库（product.md / structure.md / tech.md）
+├── docs/           # 历史文档
+└── plan/           # 实施计划归档
+```
 
-## 项目特点
+## 关键文件说明
 
-1. **清晰的分层架构**：前后端均采用分层设计，职责明确，易于维护和扩展
-2. **模块化组织**：按功能模块划分目录，代码组织清晰
-3. **完整的培训体系**：包含讲师资料和学员练习材料，适合教学场景
-4. **外部服务隔离**：通过 Integration 层和 Mock Server 实现外部依赖的解耦
+- **领域术语定义**：`CONTEXT.md` — 统一术语（客户主数据、同步外部档案、客户中心、同步状态）
+- **客户列表 API**：`CustomerDirectoryController.java` — `GET /api/customers` 支持 keyword/customerStatus/syncStatus 筛选
+- **同步业务逻辑**：`CustomerDirectoryService.java` — 内存存储、字段映射、电话脱敏、时间格式转换
+- **外部集成入口**：`ExternalCustomerCenterClient.java` — RestTemplate + X-App-Key 鉴权 + 错误码映射 → BizException
+- **前端列表页**：`CustomerDirectoryPage.js` — 筛选区、统计卡、表格区与行操作按钮（查看/编辑已预留，同步待补充）
+- **需求规格**：`specs/requirement-spec-客户档案同步.md` — 同步功能的结构化需求规格说明

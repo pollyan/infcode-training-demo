@@ -1,0 +1,58 @@
+[
+  {
+    "name": "writing-plans",
+    "description": "Use when you have a spec or requirements for a multi-step task, before touching code",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/writing-plans",
+    "enabled": true,
+    "createdAt": 1775800586400,
+    "skillFileMtimeMs": 1775800586401.7085
+  },
+  {
+    "name": "test-driven-development",
+    "description": "Use when implementing any feature or bugfix, before writing implementation code",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/test-driven-development",
+    "enabled": true,
+    "createdAt": 1775800611992,
+    "skillFileMtimeMs": 1775800611993.4343
+  },
+  {
+    "name": "verification-before-completion",
+    "description": "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/verification-before-completion",
+    "enabled": true,
+    "createdAt": 1775800632534,
+    "skillFileMtimeMs": 1775800632535.6233
+  },
+  {
+    "name": "systematic-debugging",
+    "description": "Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/systematic-debugging",
+    "enabled": true,
+    "createdAt": 1778515416780,
+    "skillFileMtimeMs": 1775800621571.166
+  },
+  {
+    "name": "executing-plans",
+    "description": "Use when you have a written implementation plan to execute in a separate session with review checkpoints",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/executing-plans",
+    "enabled": true,
+    "createdAt": 1778515416790,
+    "skillFileMtimeMs": 1775800599100.217
+  },
+  {
+    "name": "brainstorming",
+    "description": "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/brainstorming",
+    "enabled": true,
+    "createdAt": 1778515416984,
+    "skillFileMtimeMs": 1779366471242.8992
+  },
+  {
+    "name": "requirement-review",
+    "description": "需求评审阶段。将任意形式的需求描述转化为结构化的 Requirement Spec，含输入完整性评估、Problem Reframing 和 Scope Decision。",
+    "folderPath": "/Users/anhui/Library/Mobile Documents/iCloud~md~obsidian/Documents/myNote/00_词元无限/02_广联达/InfCode 开发演练培训/练习代码库/.infcode/skills/requirement-review",
+    "enabled": true,
+    "createdAt": 1779033567307,
+    "skillFileMtimeMs": 1779033567309.0723
+  }
+]

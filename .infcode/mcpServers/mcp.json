@@ -1,18 +1,11 @@
 {
-  "name": "MCP Servers",
+  "name": "New MCP server",
   "version": "0.0.1",
   "schema": "v1",
-  "mcpServers": [
-    {
-      "name": "Context7",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@latest"
-      ],
-      "env": {
-        "DEFAULT_MINIMUM_TOKENS": "10000"
-      }
+  "mcpServers": {
+    "deepmap": {
+      "type": "streamable-http",
+      "url": "http://localhost:18000/deepmap/api/mcp"
     }
-  ]
+  }
 }

@@ -74,9 +74,9 @@ else
 fi
 
 print_header "Training Notes"
-printf -- '- Training should prefer the customer\\'s real network, machine, IDE, and project when feasible.\n'
-printf -- '- For Java multi-module projects, open the full project from the repository root when possible.\n'
-printf -- '- Rules, DOCX documents, and knowledge-base materials should be prepared before class.\n'
+echo "- Training should prefer the customer's real network, machine, IDE, and project when feasible."
+echo "- For Java multi-module projects, open the full project from the repository root when possible."
+echo "- Rules, DOCX documents, and knowledge-base materials should be prepared before class."
 
 if [ "$missing" -ne 0 ]; then
   print_header "Result"

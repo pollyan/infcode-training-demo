@@ -1,178 +1,87 @@
-# 技术栈
+# 核心技术
 
-## 核心技术
+| 层 | 技术 | 说明 |
+|---|---|---|
+| 前端 | 原生 JavaScript (ES Module) | 无框架，纯 JS 模板渲染 + 事件绑定 |
+| 前端服务器 | Node.js http 模块 | 自建静态文件服务器（端口 5173），无 Vite/Webpack |
+| 后端 | Java 17 + Spring Boot 3.3.2 | REST API 骨架，内嵌 Tomcat |
+| HTTP 客户端 | Spring RestTemplate | 调用外部客户中心，由 TrainingApplication 提供 Bean |
+| 安全 | Spring Security + JWT (jjwt 0.11.5) | 已引入但当前未深度配置 |
+| Mock 服务 | Node.js http 模块 | 模拟客户中心 API（端口 9090），覆盖成功/熔断/限流/参数错误/不存在等场景 |
+| 测试 | JUnit 5 + Mockito + AssertJ | 后端单元测试骨架（4 个测试类） |
 
-### 前端技术栈
-- **原生 JavaScript (ES6+)**：使用现代 JavaScript 特性，采用 ES Module 模块化
-- **HTML5 + CSS3**：标准 Web 技术构建用户界面
-- **Hash 路由**：基于 URL Hash 实现单页应用路由导航
-- **Fetch API**：原生 HTTP 请求接口，用于与后端通信
+# 项目使用的工具
 
-### 后端技术栈
-- **Java 17**：使用 LTS 版本的 Java 语言
-- **Spring Boot 3.3.2**：基于 Spring Boot 框架构建 RESTful API
-- **Spring Web**：提供 Web MVC 功能和 HTTP 服务支持
-- **Maven**：项目构建和依赖管理工具
+- **构建工具**：Maven 3.9+（后端）；前端和 mock 无构建工具，直接用 Node 运行
+- **包管理**：npm（前端/mock 依赖管理，当前无额外依赖）
+- **运行时**：Node.js 20+（前端/mock）、Java 17+（后端）
+- **脚本工具**：Shell 脚本（`scripts/` 下的 check-env/install-deps/start-all/stop-all）
 
-### Mock 服务技术
-- **Node.js**：JavaScript 运行时环境
-- **原生 HTTP 模块**：使用 Node.js 内置 http 模块实现 Mock 服务器
+# 关键依赖
 
-## 项目使用的工具
+## 后端（pom.xml）
 
-### 开发工具
-- **Maven**：后端项目构建、依赖管理和打包
-- **Node.js**：前端开发服务器和 Mock 服务器运行环境
-- **Git**：版本控制系统
+| 依赖 | 版本 | 用途 |
+|---|---|---|
+| spring-boot-starter-web | 3.3.2 | REST API 框架 |
+| spring-boot-starter-security | 3.3.2 | 安全框架（当前未深度配置） |
+| jjwt-api / jjwt-impl / jjwt-jackson | 0.11.5 | JWT 令牌处理 |
+| spring-boot-starter-test | 3.3.2 | 测试框架（含 JUnit 5） |
+| junit-jupiter-api / junit-jupiter-engine | Spring Boot 管理 | JUnit 5 测试 |
+| mockito-core | Spring Boot 管理 | Mock 测试 |
+| assertj-core | Spring Boot 管理 | 断言库 |
 
-### 服务器工具
-- **前端开发服务器**：基于 Node.js http 模块实现的静态文件服务器
-- **Spring Boot 内置 Tomcat**：后端应用服务器
+## 前端 / Mock 服务
 
-## 关键依赖
+无第三方依赖，仅使用 Node.js 内置模块（`http`、`fs`、`path`、`url`）。
 
-### 后端依赖 (pom.xml)
-```xml
-<dependencies>
-    <!-- Spring Boot Web Starter：提供 Web MVC、RESTful API、内嵌 Tomcat 等功能 -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-</dependencies>
-```
+# 构建、开发与执行命令
 
-**依赖说明**：
-- `spring-boot-starter-web`：Spring Boot Web 开发核心依赖，包含：
-  - Spring MVC：Web 框架
-  - Jackson：JSON 序列化/反序列化
-  - Tomcat：内嵌 Web 服务器
-  - Validation：参数校验
+## 启动（推荐脚本方式）
 
-### 前端依赖 (package.json)
-```json
-{
-  "name": "infcode-training-frontend",
-  "version": "1.0.0",
-  "type": "module"
-}
-```
-
-**说明**：
-- 前端项目采用原生 JavaScript，无第三方依赖
-- `"type": "module"`：启用 ES Module 支持
-
-### Mock Server 依赖
-- 使用 Node.js 原生模块，无第三方依赖
-
-## 构建、开发和运行命令
-
-### 前端命令
-
-#### 启动前端开发服务器
 ```bash
-cd frontend
-npm start
-```
-- **端口**：5173
-- **访问地址**：http://localhost:5173
-- **功能**：提供静态文件服务，支持前端页面访问
+# 环境检测
+./scripts/check-env.sh
 
-### 后端命令
-
-#### 编译和运行后端服务
-```bash
-cd backend
-mvn spring-boot:run
-```
-- **端口**：8080
-- **API 基础路径**：http://localhost:8080
-- **健康检查接口**：http://localhost:8080/health
-
-#### 打包后端应用
-```bash
-cd backend
-mvn clean package
-```
-- **输出**：`target/infcode-training-backend-1.0.0.jar`
-
-#### 运行打包后的应用
-```bash
-java -jar target/infcode-training-backend-1.0.0.jar
-```
-
-### Mock Server 命令
-
-#### 启动 Mock 服务器
-```bash
-cd mock-server
-node server.js
-```
-- **端口**：9090
-- **API 路径**：http://localhost:9090/mock/customer-center/customers/{customerCode}
-- **功能**：模拟外部客户中心服务
-
-### 一键启动脚本
-```bash
-# 启动所有服务
+# 安装依赖并启动所有服务
 ./scripts/start-all.sh
 
 # 停止所有服务
 ./scripts/stop-all.sh
-
-# 检查环境
-./scripts/check-env.sh
-
-# 安装依赖
-./scripts/install-deps.sh
 ```
 
-### 完整启动顺序
-1. 启动 Mock Server（端口 9090）
-2. 启动后端服务（端口 8080）
-3. 启动前端服务（端口 5173）
+## 单独启动
 
-## 配置文件分析
+| 服务 | 命令 | 地址 |
+|---|---|---|
+| Mock 客户中心 | `cd mock-server && npm start` | http://127.0.0.1:9090 |
+| 后端 | `cd backend && mvn spring-boot:run` | http://127.0.0.1:8080 |
+| 前端 | `cd frontend && npm start` | http://127.0.0.1:5173 |
 
-### 后端配置 (application.properties)
-```properties
-server.port=8080
+## 构建
+
+```bash
+cd backend && mvn package
+# 前端/mock 无构建步骤，直接运行源码
 ```
-- **说明**：配置 Spring Boot 应用监听端口为 8080
 
-### 前端服务器配置 (server.js)
-- **端口**：5173（硬编码）
-- **静态文件目录**：当前目录
-- **支持文件类型**：HTML、CSS、JavaScript
+## 测试
 
-### Mock Server 配置 (server.js)
-- **端口**：9090（硬编码）
-- **模拟数据**：内置客户数据对象
-- **支持客户编码**：C202503001、C202503002、C202503500、C202503998、C202504021
+```bash
+cd backend && mvn test    # 后端单元测试
+# 前端/mock 当前无自动化测试
+```
 
-## 编码规范
+# 配置与规范
 
-### 前端编码规范
-- 新增页面放在 `src/pages/` 目录
-- 页面不直接编写复杂请求逻辑
-- 接口调用统一放在 `src/services/` 目录
-- 查询失败时展示用户可理解的提示信息
-
-### 后端编码规范
-- 遵循 Controller、Service、DTO、Integration 分层架构
-- 不在 Controller 中直接调用外部接口
-- 外部字段需映射为内部 DTO 对象
-- 发生异常时返回统一错误结构
-
-### 集成开发规范
-- 所有第三方调用统一放在 `integration` 目录
-- 做好超时、失败和字段缺失处理
-- 不允许将第三方原始错误直接透传到前端
-
-## 架构特点
-
-1. **前后端分离**：前端和后端独立部署，通过 RESTful API 通信
-2. **分层架构**：后端采用 Controller-Service-Integration 三层架构
-3. **依赖隔离**：通过 Mock Server 隔离外部服务依赖，便于开发和测试
-4. **轻量级技术栈**：前端使用原生 JavaScript，后端仅依赖 Spring Boot Web，学习成本低
-5. **教学友好**：项目结构清晰，代码简洁，适合培训和演示场景
+- **后端端口**：`server.port=8080`（application.properties）
+- **外部服务地址**：`external.customer-center.url` 默认 `http://localhost:9090/mock/customer-center`（可通过 application.properties 覆盖）
+- **鉴权头**：`X-App-Key: xingchen-crm-local`（硬编码在 ExternalCustomerCenterClient）
+- **统一返回结构**：`CommonResponse<T>` — `{ success, message, data }`；成功时 success=true/message="success"，失败时 success=false/message=错误提示
+- **异常处理**：所有异常经 `GlobalExceptionHandler` → `CommonResponse.failure`；业务异常用 `BizException`（含 `userMessage`，禁止透传技术细节）
+- **外部字段映射**：`cust_code→customerCode`、`cust_name→customerName`、`cust_status_cd→customerStatus`、`contact_phone→contactPhone`、`last_modified_date→updatedTime`
+- **数据脱敏**：`maskPhoneNumber` 保留前3后4，中间4位用星号屏蔽（如 138****5678），短于7位不脱敏
+- **时间格式**：外部 ISO_LOCAL_DATE_TIME → 内部 `yyyy-MM-dd HH:mm:ss`
+- **前端路由**：基于 hash（`#/customers`），无路由库
+- **编码分层**：后端 Controller → Service → DTO → Integration；前端页面不写请求逻辑，接口调用统一在 services 层
+- **CORS 配置**：后端 Controller 允许 `http://127.0.0.1:5173` 和 `http://localhost:5173`
