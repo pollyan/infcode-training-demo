@@ -49,7 +49,7 @@ if command -v git >/dev/null 2>&1; then
 fi
 
 print_header "Project Directories"
-for dir in frontend backend mock-server docs .infcode/rules; do
+for dir in frontend backend docs .infcode/rules; do
   if [ -d "$ROOT_DIR/$dir" ]; then
     printf '[OK] %s\n' "$dir"
   else
@@ -74,7 +74,7 @@ else
 fi
 
 print_header "Training Notes"
-printf -- '- Training should prefer the customer\\'s real network, machine, IDE, and project when feasible.\n'
+printf -- "- Training should prefer the customer's real network, machine, IDE, and project when feasible.\n"
 printf -- '- For Java multi-module projects, open the full project from the repository root when possible.\n'
 printf -- '- Rules, DOCX documents, and knowledge-base materials should be prepared before class.\n'
 

@@ -29,6 +29,5 @@ stop_service() {
 
 stop_service "frontend"
 stop_service "backend"
-stop_service "mock-server"
 
 printf '\nAll known services have been stopped.\n'

@@ -66,7 +66,6 @@ print_summary() {
   printf '\nServices started. Logs are in %s\n' "$RUN_DIR"
   printf 'Frontend:    http://127.0.0.1:5173\n'
   printf 'Backend:     http://127.0.0.1:8080/api/health\n'
-  printf 'Mock server: http://127.0.0.1:9090/health\n'
   printf '\nUse scripts/stop-all.sh to stop all services.\n'
 }
 
@@ -78,7 +77,6 @@ require_command mvn
 "$ROOT_DIR/scripts/check-env.sh"
 "$ROOT_DIR/scripts/install-deps.sh"
 
-start_service "mock-server" "$ROOT_DIR/mock-server" "npm start" "9090"
 start_service "backend" "$ROOT_DIR/backend" "mvn spring-boot:run" "8080"
 start_service "frontend" "$ROOT_DIR/frontend" "npm start" "5173"
 

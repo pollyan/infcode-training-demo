@@ -6,7 +6,7 @@
 
 ## 1. 环境要求
 
-### 前端与 mock 服务
+### 前端
 
 - Node.js 20+
 - npm 10+
@@ -27,7 +27,7 @@
 
 建议按以下顺序启动：
 
-1. 启动 mock 外部服务
+1. 启动外部环境服务（上游客户中心 9090、下游合同系统 9092，均为独立仓库，见下文 4.1）
 2. 启动后端服务
 3. 启动前端页面
 
@@ -50,17 +50,24 @@
 
 ## 4. 启动命令
 
-### 4.1 启动 mock 外部服务
+### 4.1 启动外部环境服务（独立仓库）
+
+外部上下游系统不在本仓库内，位于独立代码库（已接入 DeepMap 知识库）：
 
 ```bash
-cd mock-server
-npm install
+# 上游：星辰集团统一客户中心（监听 9090）
+cd ~/Documents/myProgram/xingchen-partners/customer-center
+mvn spring-boot:run
+
+# 下游：合同管理系统（监听 9092）
+cd ~/Documents/myProgram/xingchen-partners/contract-mgmt
 npm start
 ```
 
 启动后访问：
 
-`http://127.0.0.1:9090/health`
+- 客户中心健康检查：`http://localhost:9090/health`
+- 合同系统监控页：`http://localhost:9092/monitor`
 
 ### 4.2 启动后端服务
 
@@ -111,7 +118,7 @@ git checkout done
 
 建议全面引用系统业务与架构规范：
 
-- `docs/需求说明.md`
+- `docs/需求说明-档案深度同步.md`
 - `docs/知识库文档/业务全景与PRD_客户档案同步.md`
 - `docs/知识库文档/第三方客户中心_API契约.md`
 - `docs/知识库文档/代码架构与安全规范_v2.md`
@@ -128,7 +135,7 @@ git checkout done
 
 ## 7. 当前参考实现说明
 
-当前仓库中的参考实现包含：
+`done` 分支中的参考实现包含：
 
 1. 客户主数据列表页
 2. 列表查询与筛选
